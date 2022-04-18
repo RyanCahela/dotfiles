@@ -1,42 +1,74 @@
 filetype indent plugin on
 
-colorscheme monokai_pro
+set scrolloff=4
 
 "number of visual spaces per tab
 set tabstop=2
 
+set shiftwidth=2
+set autoindent
+set smartindent
+
+
 "number of spaces in tab when editing
 set softtabstop=2
 
-"load plugins on start
-packloadall
+"disable word wrap
+set nowrap
+
+
+"vim-plug plugins
+call plug#begin('~/.vim/plugged')
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'phanviet/vim-monokai-pro'
+Plug 'mattn/emmet-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'ap/vim-css-color'
+Plug 'thedenisnikulin/vim-cyberpunk'
+call plug#end()
+
+"set termguicolors
+colorscheme monokai_pro
+"let g:airline_theme='cyberpunk'
+
+"rainbow brackets
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+autocmd VimEnter * RainbowParentheses
+
+"set up :Prettier command
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+
+"let g:prettier#exec_cmd_path = '/Users/workbook0/.vim/plugged/vim-prettier/node_modules/prettier'
+"~/.vim/plugged/vim-prettier/plugin/prettier.vim:"
+
+"prettier autoformat when .pretterrc  present
+"let g:prettier#autoformat_config_present = 1
+
+"prettier turn off require @format or @prettier tag to format '
+"let g:prettier#autoformat_require_pragma = 0
+
+"A list containing all config file names to search for when using the g:prettier#autoformat_config_present option."
+"let g:prettier#autoformat_config_files = ['.prettierrc.json']
 
 "prettier auto format on save
-"let g:prettier#autoformat = 0
-
-"prettier auto format with @format in file header
-"let g:prettier#autoformat_require_pragma = 0
-"autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue Prettier
+"let g:prettier#autoformat = 1
 
 "prettier only run prettier if config file present
-let g:prettier#autoformat_config_present = 1
+"let g:prettier#autoformat_config_present = 1
+
+" Use <Ctrl-F> to format documents with prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+noremap <C-F> :Prettier<CR>
+
 "turn tabs into spaces
 set expandtab
 
 "show command in bottom bar
 set showcmd
-
-"vim-plug plugins
-"Plug 'sheerun/vim-polyglot'
-call plug#begin('~/.vim/plugged')
-Plug 'sheerun/vim-polyglot'
-Plug 'mattn/emmet-vim'
-call plug#end()
-
-
-
-
-
 
 map <C><left> :tabp<cr>
 map <C><right> :tabn<cr>
@@ -62,13 +94,22 @@ set shortmess+=I
 " Show line numbers.
 set number
 
+set relativenumber
+
+" Show fold markers
+set foldcolumn=1
+
+" Save folds on editor exit
+au BufWinLeave * mkview
+au BufWinEnter * silent loadview
+
 " This enables relative line numbering mode. With both number and
 " relativenumber enabled, the current line shows the true line number, while
 " all other lines (above and below) are numbered relative to the current line.
 " This is useful because you can tell, at a glance, what count is needed to
 " jump up or down to a particular line, by {count}k to go up or {count}j to go
 " down.
-set relativenumber
+"set relativenumber
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
@@ -104,6 +145,27 @@ set noerrorbells visualbell t_vb=
 " Enable mouse support. You should avoid relying on this too much, but it can
 " sometimes be convenient.
 set mouse+=a
+
+" my remaps
+let mapleader = " "
+nnoremap <leader>pv :Vex<CR>
+nnoremap <C-p> :GFiles<CR>
+nnoremap <leader>pf :Files<CR>
+
+" to make coc.nvim format your code on <cr>:
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+
+"auto colse brackets
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+
+
 
 " Try to prevent bad habits like using the arrow keys for movement. This is
 " not the only possible bad habit. For example, holding down the h/j/k/l keys
