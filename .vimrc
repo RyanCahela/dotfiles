@@ -8,7 +8,11 @@ set tabstop=2
 set shiftwidth=2
 set autoindent
 set smartindent
+"turn tabs into spaces
+set expandtab
 
+"show command in bottom bar
+set showcmd
 
 "number of spaces in tab when editing
 set softtabstop=2
@@ -16,26 +20,58 @@ set softtabstop=2
 "disable word wrap
 set nowrap
 
+" Turn on syntax highlighting.
+syntax on
+
+" Disable the default Vim startup message.
+set shortmess+=I
+
+" Show line numbers.
+set number
+
+" Show fold markers
+set foldcolumn=1
+
+colorscheme onedark
+
 
 "vim-plug plugins
-call plug#begin('~/.vim/plugged')
-Plug 'dracula/vim', { 'as': 'dracula' }
+call plug#begin(stdpath('data') . '/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'phanviet/vim-monokai-pro'
+Plug 'joshdick/onedark.vim'
+Plug 'alvan/vim-closetag'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'ap/vim-css-color'
-Plug 'thedenisnikulin/vim-cyberpunk'
 call plug#end()
 
-"set termguicolors
-colorscheme monokai_pro
-"let g:airline_theme='cyberpunk'
+" HTML Tag Auto Complete settings
+" filenames like *.xml, *.html, *.xhtml, ...
+" These are the file extensions where this plugin is enabled.
+"
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 
-"rainbow brackets
+" filenames like *.xml, *.xhtml, ...
+" This will make the list of non-closing tags self-closing in the specified files.
+"
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+
+" dict
+" Disables auto-close if not in a "valid" region (based on filetype)
+"
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+
+" end HTML Auto Complete Settings
+
+"rainbow brackets settings
 let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
 autocmd VimEnter * RainbowParentheses
 
@@ -55,7 +91,7 @@ command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 "let g:prettier#autoformat_config_files = ['.prettierrc.json']
 
 "prettier auto format on save
-"let g:prettier#autoformat = 1
+let g:prettier#autoformat = 1
 
 "prettier only run prettier if config file present
 "let g:prettier#autoformat_config_present = 1
@@ -63,12 +99,6 @@ command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 " Use <Ctrl-F> to format documents with prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 noremap <C-F> :Prettier<CR>
-
-"turn tabs into spaces
-set expandtab
-
-"show command in bottom bar
-set showcmd
 
 map <C><left> :tabp<cr>
 map <C><right> :tabn<cr>
@@ -83,58 +113,13 @@ map <C><right> :tabn<cr>
 " is present. But we're including it here just in case this config file is
 " loaded some other way (e.g. saved as `foo`, and then Vim started with
 " `vim -u foo`).
-set nocompatible
-
-" Turn on syntax highlighting.
-syntax on
-
-" Disable the default Vim startup message.
-set shortmess+=I
-
-" Show line numbers.
-set number
-
-set relativenumber
-
-" Show fold markers
-set foldcolumn=1
 
 " Save folds on editor exit
 au BufWinLeave * mkview
 au BufWinEnter * silent loadview
 
-" This enables relative line numbering mode. With both number and
-" relativenumber enabled, the current line shows the true line number, while
-" all other lines (above and below) are numbered relative to the current line.
-" This is useful because you can tell, at a glance, what count is needed to
-" jump up or down to a particular line, by {count}k to go up or {count}j to go
-" down.
-"set relativenumber
-
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
-
-" The backspace key has slightly unintuitive behavior by default. For example,
-" by default, you can't backspace before the insertion point set with 'i'.
-" This configuration makes backspace behave more reasonably, in that you can
-" backspace over anything.
-set backspace=indent,eol,start
-
-" By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
-" shown in any window) that has unsaved changes. This is to prevent you from "
-" forgetting about unsaved changes and then quitting e.g. via `:qa!`. We find
-" hidden buffers helpful enough to disable this protection. See `:help hidden`
-" for more information on this.
-set hidden
-
-" This setting makes search case-insensitive when all characters in the string
-" being searched are lowercase. However, the search becomes case-sensitive if
-" it contains any capital letters. This makes searching more convenient.
-set ignorecase
-set smartcase
-
-" Enable searching as you type, rather than waiting till you press enter.
-set incsearch
 
 " Unbind some useless/annoying default key bindings.
 nmap Q <Nop> " 'Q' in normal mode enters Ex mode. You almost never want this.
@@ -148,7 +133,7 @@ set mouse+=a
 
 " my remaps
 let mapleader = " "
-nnoremap <leader>pv :Vex<CR>
+nnoremap <leader>b :Vex<CR>
 nnoremap <C-p> :GFiles<CR>
 nnoremap <leader>pf :Files<CR>
 

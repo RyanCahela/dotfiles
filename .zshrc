@@ -103,6 +103,7 @@ alias sl="ls -a1"
 alias ga="git add ."
 alias gc="git commit -m"
 alias gpom="git push origin master"
+alias vim="nvim"
 
 
 export NVM_DIR="/Users/workbook0/.nvm"
